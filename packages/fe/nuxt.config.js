@@ -135,7 +135,7 @@ export default {
   // ------------------------- Doc: https://github.com/nuxt-community/gtm-module
   gtm: {
     // Currently hardcoded, can be added as an environment variable instead
-    id: 'GTM-NH8TLHW',
+    id: 'GTM-WSHTSSQ',
     pageTracking: true
   },
   // ////////////////////////////////////////////////////// [Module] GoogleFonts
