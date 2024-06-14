@@ -17,13 +17,15 @@ const Util = require('util')
 const Stream = require('stream')
 const Pipeline = Util.promisify(Stream.pipeline)
 const readline = require('node:readline')
-const Spawn = require('child_process').spawn
 const argv = require('minimist')(process.argv.slice(2))
+
 require('dotenv').config({ path: Path.resolve(__dirname, '../.env') })
 
 const MC = require('../config')
 
 const CID_TMP_DIR = Path.resolve(`${MC.packageRoot}/tmp/cid-files`)
+
+let manifestLength = 0
 
 // ////////////////////////////////////////////////////////////////// Initialize
 MC.app = Express()
@@ -50,176 +52,74 @@ try {
 
 // ///////////////////////////////////////////////////////////////////// Modules
 require('@Module_Database')
-require('@Module_Cid')
-const { GetFileFromDisk, SecondsToHms } = require('@Module_Utilities')
+require('@Module_Cidtemp')
+const { SecondsToHms } = require('@Module_Utilities')
+const { CreateWorkerPool } = require('@Root/scripts/worker-pool-batch-processor.js')
 
 // /////////////////////////////////////////////////////////////////// Functions
-// ------------------------------------------------------------ retrieveCidFiles
-const retrieveCidFile = async (line, retryNo = 0) => {
-  try {
-    if (retryNo > 0) {
-      console.log(`Retry number ${retryNo}`)
+// ------------------------------------------------------ logCurrentImportTotals
+const logCurrentImportTotals = (currentResult, batchNo, resultsToDate) => {
+  const len = resultsToDate.length
+  let dbTotalImported = 0
+  let dbTotalModified = 0
+  for (let i = 0; i < len; i++) {
+    const result = resultsToDate[i]
+    if (result && result.databaseWriteResult) {
+      const newlyImported = result.databaseWriteResult.nUpserted || 0
+      const newlyModified = result.databaseWriteResult.nModified || 0
+      dbTotalImported = dbTotalImported + newlyImported
+      dbTotalModified = dbTotalModified + newlyModified
     }
-    const upload = JSON.parse(line)
-    // fetch file using upload cid
-    const response = await Axios.get(`https://${upload.cid}.ipfs.w3s.link/`, {
-      responseType: 'stream'
-    })
-    // if a file already exists with this name in the temp folder,
-    // delete it to make way for an updated version
-    await deleteTemporaryFile(upload.name)
-    // write file data to new zst file in the temp folder
-    await Pipeline(response.data, Fs.createWriteStream(`${CID_TMP_DIR}/${upload.name}`))
-    // unpack the zst and return the inner json
-    return await unpackRetrievedFile({
-      cid: upload.cid,
-      name: upload.name,
-      updated: upload.updated,
-      created: upload.created
-    })
-  } catch (e) {
-    console.log('====================================== [Function: unpackCids]')
-    console.log(e)
-    if (retryNo < 10) {
-      console.log(`Error retrieving CID ${JSON.parse(line).cid}. Retrying retrieval...`)
-      await retrieveCidFile(line, retryNo + 1)
-    } else {
-      const cid = JSON.parse(line).cid
-      console.log(`Could not retrieve CID ${cid}. Max retries reached.`)
-      await cacheFailedCID(cid)
-    }
+  }
+  if (
+    typeof currentResult === 'object' &&
+    typeof currentResult.databaseWriteResult === 'object' &&
+    typeof currentResult.batchBackupResult === 'object'
+  ) {
+    const currentImportStats = `${currentResult.databaseWriteResult.nUpserted + currentResult.databaseWriteResult.nModified} CIDs were imported to the db in this batch`
+    console.log(` ${currentImportStats} | ${currentResult.batchBackupResult.message} | ${dbTotalImported + dbTotalModified} of ${manifestLength} CIDs completed`)
   }
 }
 
-// --------------------------------------------------------------- unpackZstFile
-const unpackZstFile = (file) => {
-  return new Promise((resolve, reject) => {
-    const unzstd = Spawn('unzstd', [`../tmp/cid-files/${file.name}`])
-    const errors = []
-    unzstd.stderr.on('data', (msg) => {
-      errors.push(`Error unpacking ${file.name}: ${msg.toString()}`)
-    })
-    unzstd.on('exit', (code) => {
-      const err = errors.length > 0 && code !== 0
-      if (err) {
-        console.log(errors.join('\n'))
-      }
-      resolve()
-    })
-  })
-}
-
-// --------------------------------------------------------- unpackRetrievedFile
-const unpackRetrievedFile = async (file) => {
-  try {
-    const jsonFilename = file.name.substring(0, file.name.length - 4)
-    await deleteTemporaryFile(jsonFilename)
-    await unpackZstFile(file)
-    await deleteTemporaryFile(file.name)
-    const json = await GetFileFromDisk(`${CID_TMP_DIR}/${jsonFilename}`, true)
-    const fileMetadata = {
-      piece_cid: json.piece_cid,
-      payload_cid: json.payload_cid,
-      raw_car_file_size: json.raw_car_file_size,
-      dataset_slug: json.dataset,
-      filename: jsonFilename,
-      web3storageCreatedAt: file.created,
-      web3storageUpdatedAt: file.updated
-    }
-    await deleteTemporaryFile(jsonFilename)
-    return fileMetadata
-  } catch (e) {
-    console.log('============================ [Function: unpackRetrievedFiles]')
-    console.log(e)
+const logFinalImportResults = (results, errors) => {
+  console.log(`📒 CID import & backup finished | ${results.length} total batches processed`)
+  const len = errors.length
+  failedBatches = []
+  for (let i = 0; i < len; i++) {
+    const error = errors[i]
+    failedBatches.push(error.batch)
   }
-}
-
-// ------------------------------------------------- writeFileMetadataToDatabase
-const writeFileMetadataToDatabase = async (retrievedFiles) => {
-  try {
-    const operations = []
-    const len = retrievedFiles.length
-    for (let i = 0; i < len; i++) {
-      const file = retrievedFiles[i]
-      operations.push({
-        updateOne: {
-          filter: { payload_cid: file.payload_cid },
-          update: { $set: file },
-          upsert: true
-        }
-      })
-    }
-    const response = await MC.model.Cid.bulkWrite(operations, { ordered: false })
-    return response.result
-  } catch (e) {
-    console.log('========================= [Function: writeCidFilesToDatabase]')
-    console.log(e)
-  }
-}
-
-// -------------------------------------------------------------- cacheFailedCid
-const cacheFailedCID = async (cid) => {
-  try {
-    await Pipeline(`${cid}\n`, Fs.createWriteStream(`${CID_TMP_DIR}/failed-cid-retrievals.txt`, { flags: 'a' }))
-  } catch (e) {
-    console.log('================================= [Function: cacheFailedCID ]')
-    console.log(e)
-  }
-}
-
-// --------------------------------------------------------- deleteTemporaryFile
-const deleteTemporaryFile = async (filename) => {
-  try {
-    if (Fs.existsSync(`${CID_TMP_DIR}/${filename}`)) {
-      Fs.unlinkSync(`${CID_TMP_DIR}/${filename}`)
-    }
-  } catch (e) {
-    console.log('============================ [Function: deleteTemporaryFile ]')
-    console.log(e)
+  const failedCids = failedBatches.flat()
+  if (failedCids.length) {
+    console.log(`${failedCids.length} CID imports/backups were unsuccessful:`)
+    console.log(failedCids)
   }
 }
 
 // ------------------------------------------------- getCidFilesFromManifestList
-const getCidFilesFromManifestList = async (importMax) => {
+const getCidFilesFromManifestList = async () => {
   try {
-    if (Fs.existsSync(`${CID_TMP_DIR}/cid-manifest.txt`)) {
-      const manifest = Fs.createReadStream(`${CID_TMP_DIR}/cid-manifest.txt`)
-      const rl = readline.createInterface({
-        input: manifest,
-        crlfDelay: Infinity
-      })
-      // import all lines from the manifest to an array
-      const manifestCidLines = []
-      for await (const line of rl) {
-        manifestCidLines.push(line)
-      }
-      // reverse the array to import oldest CIDs first
-      // begin writing to the database in batches
-      manifestCidLines.reverse()
-      let retrievedFiles = []
-      let total = 0
-      const batchSize = argv.pagesize || 1000
-      const len = manifestCidLines.length
-      for (let i = 0; i < len; i++) {
-        if (i < importMax) {
-          const line = manifestCidLines[i]
-          console.log(`Retrieving file ${i + 1} from the CID manifest list.`)
-          const retrieved = await retrieveCidFile(line)
-          if (retrieved) { retrievedFiles.push(retrieved) }
-          // write retrieved file data to the database in batches of 1000
-          if ((i + 1) % batchSize === 0) {
-            const result = await writeFileMetadataToDatabase(retrievedFiles)
-            total = total + result.nUpserted + result.nModified
-            console.log(`${result.nUpserted} new CIDs imported in this batch | ${result.nModified} CIDs updated in this batch | A total of ${total} CIDs imported/updated so far.`)
-            retrievedFiles = []
-          }
-        } else {
-          break
-        }
-      }
-      const result = await writeFileMetadataToDatabase(retrievedFiles)
-      console.log(`${result.nUpserted} new CIDs imported in this batch | ${result.nModified} CIDs updated in this batch | A total of ${total + result.nUpserted + result.nModified} CIDs were imported/updated to the database.`)
+    const manifestList = Fs.createReadStream(`${CID_TMP_DIR}/cid-manifest.txt`)
+    const rl = readline.createInterface({
+      input: manifestList,
+      crlfDelay: Infinity
+    })
+    // import all lines from the manifest to an array
+    const manifest = []
+    for await (const line of rl) {
+      manifest.push(line)
     }
+    // reverse the array to import oldest CIDs first
+    manifest.reverse()
+    manifestLength = manifest.length
+    // pass manifest on to the worker pool
+    const options = {
+      threads: argv.threads,
+      batchSize: argv.pagesize || 1000,
+      onBatchResult: logCurrentImportTotals,
+      onWorkerPoolComplete: logFinalImportResults
+    }
+    CreateWorkerPool(Path.resolve(__dirname, './cid-batch-import.js'), 'processManifestBatch', manifest, options)
   } catch (e) {
     console.log('===================== [Function: getCidFilesFromManifestList]')
     console.log(e)
@@ -276,18 +176,24 @@ const createManifestFromWeb3StorageCids = async (searchParams, maxPages, lastSav
 // ///////////////////////////////////////////////////////////////// CidImporter
 const CidImporter = async () => {
   try {
-    const start = process.hrtime()[0]
+    startTime = process.hrtime()[0]
     const limit = argv.pagesize || 1000
     const maxPages = argv.maxpages || Infinity
     console.log(`📖 CID import started | page size of ${limit} and page maximum ${maxPages}.`)
     // Get the latest upload entry from the database
-    const mostRecentCid = await MC.model.Cid.find().sort({ web3storageCreatedAt: -1 }).limit(1)
-    const mostRecentDocument = mostRecentCid[0]
-    console.log('Most recent CID imported:')
-    console.log(mostRecentDocument)
+    const mostRecentCid = await MC.model.Cidtemp.find().sort({ web3storageCreatedAt: -1 }).limit(1)
+    let mostRecentDocument = mostRecentCid[0]
+    if (argv.all) { 
+      mostRecentDocument = false 
+    } else {
+      console.log('Most recent CID imported:')
+      console.log(mostRecentDocument)
+    }
     const lastSavedDate = mostRecentDocument ? new Date(mostRecentDocument.web3storageCreatedAt).getTime() : 0
     // Delete the outdated manifest file if it exists
-    await deleteTemporaryFile('cid-manifest.txt')
+    if (Fs.existsSync(`${CID_TMP_DIR}/cid-manifest.txt`)) {
+      Fs.unlinkSync(`${CID_TMP_DIR}/cid-manifest.txt`)
+    }
     /**
      * Build a manifest list of all cids not yet uploaded to the database:
      * args:
@@ -306,10 +212,9 @@ const CidImporter = async () => {
      * args:
      *  limit number of entries to the database (this will only be used for test)
      */
-    await getCidFilesFromManifestList(limit * maxPages)
-    const end = process.hrtime()[0]
-    console.log(`📒 CID import finished | took ${SecondsToHms(end - start)}`)
-    process.exit(0)
+    await getCidFilesFromManifestList()
+    const endTime = process.hrtime()[0]
+    console.log(`CID manifest took ${SecondsToHms(endTime - startTime)}`)
   } catch (e) {
     console.log('===================================== [Function: CidImporter]')
     console.log(e)
