@@ -289,7 +289,7 @@ export default {
 
 .panel-before,
 .panel-after {
-  position: relative;
+  // position: relative;
 }
 
 img {

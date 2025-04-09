@@ -16,9 +16,8 @@
     <!-- =================================================== Slider + Filter -->
     <Filterer
       filter-key="categories"
-      :options="filters.categories">
+      :options="siteContent.categoryList">
       <CircularSlider
-        slot-scope="{ applyFilter }"
         slider-id="category-slider"
         :start-panel-index="collection.length - 1"
         :display-options="{ default: 7, xlarge: 6, large: 5, small: 4, mini: 5 }"
@@ -37,16 +36,16 @@
           #[`slider-panel-${i}`]>
           <div
             :key="`slide-${i}`"
-            class="category-card"
-            @click="initializeFilter(i, applyFilter)">
+            class="category-card">
             <div class="inner-content">
               <div
                 class="background-image"
-                :style="{ 'background-image': `url('/images/categories/${slide.label.replaceAll(' ', '-')}.jpg')` }">
+                :style="{ 'background-image': `url('/images/categories/${slide.id}.jpg')` }">
               </div>
               <div class="category">
                 <div class="text">
-                  {{ `${slide.label} (${slide.count})` }}
+                  <!-- {{ `${slide.label} (${slide.count})` }} -->
+                  {{ slide.name }}
                 </div>
               </div>
             </div>
@@ -87,10 +86,11 @@ export default {
 
   computed: {
     ...mapGetters({
-      filters: 'datasets/filters'
+      filters: 'datasets/filters',
+      siteContent: 'general/siteContent'
     }),
     collection () {
-      return this.filters ? this.filters.categories : false
+      return this.siteContent.categoryList
     },
     sliderGrid () {
       return this.block.sliderGrid
@@ -182,9 +182,11 @@ export default {
 }
 
 :deep(.slider-controls) {
-  // position: absolute;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   width: 100%;
-  margin-top: -1rem;
+  // margin-top: -1rem;
   // transform: translateY(74px);
   @include small {
     transform: none;
@@ -219,17 +221,17 @@ export default {
 }
 
 .category-card {
-  cursor: pointer;
+  // cursor: pointer;
   position: relative;
   width: 100%;
   min-height: 9.125rem;
-  &:hover {
-    .text {
-      &:after {
-        opacity: 1;
-      }
-    }
-  }
+  // &:hover {
+  //   .text {
+  //     &:after {
+  //       opacity: 1;
+  //     }
+  //   }
+  // }
 }
 
 .inner-content {

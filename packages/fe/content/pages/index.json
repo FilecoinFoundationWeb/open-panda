@@ -115,30 +115,30 @@
       "grid": {
         "labels": {
           "tier1": {
-            "cid": "CID",
+            "cid": "CIDs",
             "replication": "Replication Factor",
-            "data_size": "Dataset Size",
+            "size": "Dataset Size",
             "total": "Total Data on Network",
             "storage": "Storage Provider"
           },
           "tier2": {
-            "file_extensions": "File Types",
-            "locations": "Location"
+            "fileExtensions": "File Types",
+            "locations": "Locations"
           }
         }
       },
       "list": {
         "labels": {
           "tier1": {
-            "cid": "CID",
+            "cid": "CIDs",
             "replication": "Replication Factor",
-            "data_size": "Dataset Size",
-            "locations": "Location"
+            "size": "Dataset Size",
+            "locations": "Locations"
           },
           "tier2": {
             "storage": "Storage Provider",
             "total": "Total Data on Network",
-            "file_extensions": "File Types"
+            "fileExtensions": "File Types"
           }
         }
       }

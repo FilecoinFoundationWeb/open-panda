@@ -13,6 +13,8 @@ import { mapGetters } from 'vuex'
 import AboutPageData from '@/content/pages/about.json'
 import BlockBuilder from '@/components/block-builder'
 
+import datasetList from '@/content/data/dataset-list.json'
+
 // ====================================================================== Export
 export default {
   name: 'About',
@@ -29,6 +31,7 @@ export default {
 
   async fetch ({ app, store, route, error }) {
     await store.dispatch('general/getBaseData', { key: 'about', data: AboutPageData })
+    await store.dispatch('general/getBaseData', { key: 'datasetList', data: datasetList })
   },
 
   head () {

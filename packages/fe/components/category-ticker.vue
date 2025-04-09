@@ -1,40 +1,26 @@
 <template>
   <div class="category-ticker">
 
-    <Filters
-      class="show-mobile-only"
-      open-direction="right"
-      :show-typeahead="true" />
-
     <div class="inner-content">
 
       <img :src="block.image" class="img" />
 
-      <Filterer
-        filter-key="categories"
-        :options="filters.categories">
-        <div
-          slot-scope="{ applyFilter }"
-          class="text-wrapper">
+      <div class="text-wrapper">
 
-          <div class="message">
-            {{ message }}
-          </div>
-
-          <div
-            class="ticker"
-            @click="initializeFilter(categoryIndex, applyFilter)">
-            <span
-              v-for="(category, i) in categories"
-              :key="category"
-              :class="['tick', { current: categoryIndex === i }]">
-              {{ category }}
-            </span>
-          </div>
-
+        <div class="message">
+          {{ message }}
         </div>
 
-      </Filterer>
+        <div class="ticker">
+          <span
+            v-for="(category, i) in categories"
+            :key="category"
+            :class="['tick', { current: categoryIndex === i }]">
+            {{ category }}
+          </span>
+        </div>
+
+      </div>
 
     </div>
 
@@ -43,19 +29,11 @@
 
 <script>
 // ====================================================================== Import
-import { mapGetters, mapActions } from 'vuex'
-
-import Filterer from '@/modules/search/components/filterer'
-import Filters from '@/components/filters'
+import { mapActions, mapGetters } from 'vuex'
 
 // ====================================================================== Export
 export default {
   name: 'CategoryTicker',
-
-  components: {
-    Filterer,
-    Filters
-  },
 
   props: {
     block: {
@@ -74,14 +52,16 @@ export default {
 
   computed: {
     ...mapGetters({
-      filters: 'datasets/filters'
+      siteContent: 'general/siteContent'
     }),
+    categoryList () {
+      return this.siteContent.categoryList
+    },
     message () {
       return this.block.message
     },
     categories () {
-      if (this.filters) { return this.filters.categories.map(item => item.label) }
-      return []
+      return this.categoryList.map(item => item.name)
     }
   },
 
@@ -129,9 +109,6 @@ export default {
   justify-content: center;
   width: 100%;
   position: relative;
-  // @include mini {
-  //   flex-direction: column;
-  // }
 }
 
 .text-wrapper {
@@ -156,7 +133,6 @@ export default {
   @include fontSize_16;
   @include fontWeight_Bold;
   line-height: leading(24, 16);
-  cursor: pointer;
   white-space: nowrap;
   position: absolute;
   top: 0;

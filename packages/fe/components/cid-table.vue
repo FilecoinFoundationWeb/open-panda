@@ -4,13 +4,6 @@
     <div
       v-if="cidList && cidList.length"
       class="toolbar">
-      <Searchbar
-        placeholder="Search by filename or CID"
-        :loading="cidsLoading"
-        :redirect-search="false"
-        field-key="cid-search"
-        theme="line"
-        class="cids-searchbar" />
       <div class="checkboxes">
         <FieldContainer
           field-key="toggle_complete_data"
@@ -84,7 +77,6 @@ import { mapGetters } from 'vuex'
 import CIDCard from '@/components/cid-card'
 import PaginationControls from '@/components/pagination-controls'
 import Limit from '@/components/limit'
-import Searchbar from '@/components/searchbar'
 import FieldContainer from '@/components/form/field-container'
 import Spinner from '@/components/spinners/triple-dot'
 
@@ -109,7 +101,6 @@ export default {
     CIDCard,
     PaginationControls,
     Limit,
-    Searchbar,
     FieldContainer,
     Spinner
   },

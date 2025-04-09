@@ -3,7 +3,7 @@
     v-slot="{ applyFilter, originalSelected }"
     filter-key="sort"
     :is-single-option="true"
-    :options="options"
+    :options="[]"
     class="datasets-sort"
     v-on="$listeners">
     <FieldContainer
@@ -12,7 +12,7 @@
         type: 'select',
         required: false,
         label: 'Sort by',
-        options,
+        options: options,
         defaultValue: originalSelected.length > 0 ? originalSelected : [0], /* manually set to 0 because default in datasets.js store corresponds with the 0'th value in limitOptions */
         resetGroupId: 'sort',
         updateGroupId: 'sort',

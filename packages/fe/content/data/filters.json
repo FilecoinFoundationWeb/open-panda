@@ -1,0 +1,35 @@
+{
+  "sort": [
+    { "label": "Data Size ↑", "value": "data_size,1" },
+    { "label": "Data Size ↓", "value": "data_size,-1" },
+    { "label": "A-Z", "value": "name,1" },
+    { "label": "Z-A", "value": "name,-1" }
+  ],
+  "limit": [
+    { "label": 12, "value": 12 },
+    { "label": 24, "value": 24 },
+    { "label": 36, "value": 36 }
+  ],
+  "filters": {
+    "fullyStored": [
+      {
+        "label": "Show only fully stored datasets",
+        "value": true
+      }
+    ],
+    "licenses": [
+      { "value": "gpl", "label": "GPL" },
+      { "value": "cc0", "label": "CC0" },
+      { "value": "gnu", "label": "GNU" },
+      { "value": "apl", "label": "APL" },
+      { "value": "mit", "label": "MIT" },
+      { "value": "bsd", "label": "BSD" },
+      { "value": "bsl", "label": "BSL" },
+      { "value": "copyright", "label": "Copyright" },
+      { "value": "epl", "label": "EPL" },
+      { "value": "mpl", "label": "MPL" },
+      { "value": "unlicensed", "label": "Unlicensed" },
+      { "value": "other", "label": "Other" }
+    ]
+  }
+}

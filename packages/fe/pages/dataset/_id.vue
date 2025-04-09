@@ -34,11 +34,11 @@
           data-push-right="off-2_lg-1_md-0_mi-0">
           <div class="header-matter">
 
-            <div
+            <!-- <div
               v-if="progressMessage"
               class="message-banner"
               v-html="progressMessage">
-            </div>
+            </div> -->
 
             <h1 class="heading">
               {{ heading }}
@@ -154,12 +154,27 @@
                               <div
                                 v-if="Array.isArray(item.value)"
                                 :class="['value', 'list', $slugify(item.label)]">
-                                <template v-if="item.value.length">
+                                <template v-if="item.label === 'Locations'">
+                                  <template v-for="location in item.value">
+                                    {{ $getFlagIcon(location.country_code) }}
+                                  </template>
+                                </template>
+                                <template v-else-if="item.value.length">
                                   <div
-                                    v-for="value in item.value"
-                                    :key="value"
+                                    v-for="(value, j) in item.value"
+                                    :key="`${value}-${j}`"
                                     class="list-item">
-                                    {{ value }}
+                                    <template v-if="item.label === 'Download'">
+                                      <a
+                                        :href="value.url"
+                                        target="_blank"
+                                        class="link">
+                                        {{ value.label }}
+                                      </a>
+                                    </template>
+                                    <template v-else>
+                                      {{ value }}
+                                    </template>
                                   </div>
                                 </template>
                                 <template v-else>
@@ -218,6 +233,8 @@ import AccordionSection from '@/components/accordion/accordion-section'
 import AccordionHeader from '@/components/accordion/accordion-header'
 import AccordionContent from '@/components/accordion/accordion-content'
 
+import datasetList from '@/content/data/dataset-list.json'
+
 // =================================================================== Functions
 const handlePageResize = (instance) => {
   if (window.matchMedia('(max-width: 53.125rem)').matches) {
@@ -248,7 +265,8 @@ export default {
 
   async asyncData ({ store, route, error }) {
     store.dispatch('cid/setLoadingStatus', { status: true })
-    const datasetExists = await store.dispatch('dataset/getDataset', { route })
+    await store.dispatch('general/getBaseData', { key: 'datasetList', data: datasetList })
+    const datasetExists = await store.dispatch('dataset/getDataset', { datasetList, route })
     if (!datasetExists) { return error('Dataset could not be found.') }
     return { datasetExists }
   },
@@ -284,9 +302,9 @@ export default {
     slug () {
       return this.dataset.slug
     },
-    progressMessage () {
-      return '<b>In progress -</b> This dataset is currently being onboarded to the network and is only partially available. All data will be fully available soon.'
-    },
+    // progressMessage () {
+    //   return '<b>In progress -</b> This dataset is currently being onboarded to the network and is only partially available. All data will be fully available soon.'
+    // },
     headerImage () {
       let imgUrl = this.dataset.slug
       if (this.dataset.slug.includes('common-crawl')) {
@@ -309,17 +327,17 @@ export default {
         description: this.dataset.description
       }
     },
-    dateCreated () {
-      return this.dataset.createdAt ? this.$moment(this.dataset.createdAt).format('YYYY') : '-'
-    },
+    // dateCreated () {
+    //   return this.dataset.createdAt ? this.$moment(this.dataset.createdAt).format('YYYY') : '-'
+    // },
     datasetSize () {
-      return this.dataset.data_size ? this.$formatBytes(this.dataset.data_size) : '-'
+      return this.dataset.size ? this.$formatBytes(this.dataset.size) : '-'
     },
     totalDataOnNetwork () {
-      return this.dataset.total_data_on_network
+      return this.dataset.total ? this.$formatBytes(this.dataset.total) : '-'
     },
     storageProviderCount () {
-      return this.dataset.storage_provider_count
+      return this.dataset.storage
     },
     stats () {
       const stats = [
@@ -338,18 +356,19 @@ export default {
     resources () {
       return this.dataset.resources
     },
-    fileExtensions () {
-      return this.dataset.file_extensions
-    },
+    // fileExtensions () {
+    //   return this.dataset.file_extensions
+    // },
     infoItems () {
       return [
         { label: 'Author', value: this.dataset.authors },
-        { label: 'Date Created', value: this.dateCreated },
+        { label: 'Date Created', value: this.dataset.createdAt },
         { label: 'Funders', value: this.dataset.funders },
-        { label: 'File Types', value: this.fileExtensions },
+        { label: 'File Types', value: this.dataset.fileExtensions },
         { label: 'Data Stored', value: this.dataStored },
         { label: 'Storage Providers', value: this.storageProviderCount },
-        { label: 'Locations', value: this.locations }
+        { label: 'Locations', value: this.locations },
+        { label: 'Download', value: this.dataset.downloadLinks }
       ]
     }
   },
@@ -575,6 +594,9 @@ export default {
     }
   }
   .description {
+    h5 {
+      margin-bottom: 1rem;
+    }
     p {
       @include p2;
     }
@@ -748,7 +770,9 @@ export default {
     display: flex;
     flex-direction: column;
   }
-  .link {
+}
+
+.link {
     font-family: $font_Primary;
     @include fontSize_16;
     @include fontWeight_Medium;
@@ -760,11 +784,13 @@ export default {
     -webkit-box-flex: 1;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
+    &:hover {
+      text-decoration: underline;
+    }
     &:not(:last-child) {
       margin-bottom: 0.5rem;
     }
   }
-}
 
 .information {
   padding: 0 1.5rem;

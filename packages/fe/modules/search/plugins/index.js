@@ -86,6 +86,7 @@ const ClearSearchAndFilters = async (app, payload) => {
 
 // //////////////////////////////////////////////// CheckIfFilterSelectionsExist
 const CheckIfFilterSelectionsExist = async (app, filters) => {
+  return false
   let selelectionsExist = false
   filters.forEach((filterKey) => {
     if (!app.$filter(filterKey).isEmpty()) {

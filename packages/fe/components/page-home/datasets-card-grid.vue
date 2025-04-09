@@ -28,8 +28,8 @@
           <span :class="['value', key]">
             <template v-if="!dataset[key]">-</template>
             <!-- ................................................. data size -->
-            <template v-else-if="key === 'data_size'">
-              {{ $formatBytes(dataset.data_size) }}
+            <template v-else-if="key === 'size' || key === 'total'">
+              {{ $formatBytes(dataset[key]) }}
             </template>
             <!-- ........................................... everything else -->
             <template v-else-if="dataset[key]">
@@ -44,7 +44,7 @@
         <!-- ............................................... file extensions -->
         <div class="metadata-entry">
           <span class="label bold">
-            {{ labelsTier2.file_extensions }}
+            {{ labelsTier2.fileExtensions }}
           </span>
           <span v-if="!fileExtData" class="value">-</span>
           <template v-for="(item, index) in fileExtData">
@@ -130,7 +130,7 @@ export default {
       return this.labels.tier2
     },
     fileExtData () {
-      return this.dataset.file_extensions
+      return this.dataset.fileExtensions
     },
     locationsData () {
       return this.dataset.locations

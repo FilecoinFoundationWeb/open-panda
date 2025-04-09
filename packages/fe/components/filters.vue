@@ -3,25 +3,27 @@
     v-mousedown-outside="closePanel"
     :class="['filters', { open }, `direction-${openDirection}`, showSearch || showTypeahead ? 'has-search' : 'no-search', `theme-${theme}`]">
 
-    <div class="button-c">
-      <Searchbar
-        v-if="showSearch || showTypeahead"
-        :show-typeahead="showTypeahead"
-        :placeholder="`Search ${datasetListTypeahead.length || '...'} datasets`"
-        theme="solid"
-        v-on="$listeners" />
-      <button class="button-filter" @click="togglePanel">
-        <FiltersIcon class="icon" />
-        <div class="button-content">
-          <client-only>
-            <span v-if="filterSelectionsExist" class="has-filters-dot" />
-          </client-only>
-          <span>{{ filterPanelData.labels.buttonText }}</span>
-        </div>
-      </button>
+    <div class="feature-not-available-wrapper">
+      <div class="button-c">
+        <Searchbar
+          v-if="showSearch || showTypeahead"
+          :show-typeahead="showTypeahead"
+          :placeholder="`Search ${ siteContent.datasetList.length || '...'} datasets`"
+          theme="solid"
+          v-on="$listeners" />
+        <button class="button-filter" @click="togglePanel">
+          <FiltersIcon class="icon" />
+          <div class="button-content">
+            <client-only>
+              <span v-if="filterSelectionsExist" class="has-filters-dot" />
+            </client-only>
+            <span>{{ filterPanelData.labels.buttonText }}</span>
+          </div>
+        </button>
+      </div>
     </div>
 
-    <div :class="['filter-panel', { open }]">
+    <!-- <div :class="['filter-panel', { open }]">
       <CardCutout>
         <section class="grid-noGutter-middle-spaceBetween">
           <h5>{{ filterPanelData.labels.add }}</h5>
@@ -82,7 +84,8 @@
           </Button>
         </section>
       </CardCutout>
-    </div>
+    </div> -->
+    
   </div>
 </template>
 
@@ -90,14 +93,14 @@
 // ===================================================================== Imports
 import { mapGetters } from 'vuex'
 
-import DatasetHistogram from '@/components/dataset-histogram'
-import Filterer from '@/modules/search/components/filterer'
-import ButtonFilters from '@/components/buttons/button-filters'
-import ButtonToggle from '@/components/buttons/button-toggle'
-import Button from '@/components/buttons/button'
-import CardCutout from '@/components/card-cutout'
+// import DatasetHistogram from '@/components/dataset-histogram'
+// import Filterer from '@/modules/search/components/filterer'
+// import ButtonFilters from '@/components/buttons/button-filters'
+// import ButtonToggle from '@/components/buttons/button-toggle'
+// import Button from '@/components/buttons/button'
+// import CardCutout from '@/components/card-cutout'
 import FiltersIcon from '@/components/icons/filter'
-import IconClose from '@/components/icons/close'
+// import IconClose from '@/components/icons/close'
 import Searchbar from '@/components/searchbar'
 
 // ====================================================================== Export
@@ -105,14 +108,14 @@ export default {
   name: 'Filters',
 
   components: {
-    DatasetHistogram,
-    Filterer,
-    ButtonFilters,
-    ButtonToggle,
-    Button,
-    CardCutout,
+    // DatasetHistogram,
+    // Filterer,
+    // ButtonFilters,
+    // ButtonToggle,
+    // Button,
+    // CardCutout,
     FiltersIcon,
-    IconClose,
+    // IconClose,
     Searchbar
   },
 
@@ -171,15 +174,15 @@ export default {
     }),
     filterPanelData () {
       return this.siteContent.general ? this.siteContent.general.filterPanel : false
-    },
-    filterKeys () {
-      return this.filterGroups.map(group => (group.id)).concat(['page', 'datasetSizeMin', 'datasetSizeMax'])
-    },
-    disableSearchButton () {
-      const filterSelectionsExist = this.$checkIfFilterSelectionsExist(this.filterKeys)
-      const searchExists = !this.$search('search').isEmpty()
-      return !filterSelectionsExist && !searchExists
     }
+    // filterKeys () {
+    //   return this.filterGroups.map(group => (group.id)).concat(['page', 'datasetSizeMin', 'datasetSizeMax'])
+    // },
+    // disableSearchButton () {
+    //   const filterSelectionsExist = this.$checkIfFilterSelectionsExist(this.filterKeys)
+    //   const searchExists = !this.$search('search').isEmpty()
+    //   return !filterSelectionsExist && !searchExists
+    // }
   },
 
   watch: {
@@ -225,6 +228,32 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.feature-not-available-wrapper {
+  position: relative;
+  &:hover {
+    &::before {
+      transition: 150ms ease-in;
+      backdrop-filter: blur(10px);
+      opacity: 1;
+    }
+  }
+  &::before {
+    content: 'Feature not available';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    border-radius: toRem(30) toRem(30) toRem(30) toRem(2);
+    opacity: 0;
+    transition: 150ms ease-out;
+  }
+}
+
 :deep(.button-toggle) {
   display: flex;
   align-items: center;
@@ -241,6 +270,7 @@ export default {
 .button-c {
   display: flex;
   height: toRem(50);
+  pointer-events: none;
   .has-search & {
     @include shadow3;
     border-radius: toRem(30);

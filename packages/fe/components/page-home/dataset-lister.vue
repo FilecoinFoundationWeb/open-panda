@@ -5,7 +5,6 @@
       <div
         v-for="(dataset, index) in datasetList"
         :key="`dataset-${layout}-${index}`"
-        :asd="`dataset-${layout}-${index}`"
         class="col">
         <component
           :is="cardType"
@@ -47,8 +46,11 @@ export default {
 
   computed: {
     ...mapGetters({
-      datasetList: 'datasets/datasetList'
+      siteContent: 'general/siteContent'
     }),
+    datasetList () {
+      return this.siteContent.datasetList
+    },
     gridClasses () {
       return this.layout === 'grid' ? 'grid-4_lg-3_md-2_sm-1' : 'grid-1'
     },

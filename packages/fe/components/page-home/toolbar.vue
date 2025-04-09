@@ -12,32 +12,34 @@
 
     <!-- ========================= searchbar, checkbox, sort, filter button -->
     <div class="toolbar-top">
-      <div class="grid-middle-spaceBetween">
+      <div class="feature-not-available-wrapper">
+        <div class="grid-middle-spaceBetween">
 
-        <div class="col-8_md-12">
-          <div class="toolbar-panel-left">
-            <Searchbar
-              :placeholder="`Search ${count || '...'} datasets`"
-              :loading="dataLoading"
-              theme="line"
-              class="datasets-searchbar" />
-            <!-- <CheckboxFullyStored
-              :options="filters.fullyStored"
-              class="datasets-checkbox show-desktop-only" /> -->
-            <Filters class="show-mobile-only" />
+          <div class="col-8_md-12">
+            <div class="toolbar-panel-left">
+              <Searchbar
+                :placeholder="`Search ${count || '...'} datasets`"
+                :loading="dataLoading"
+                theme="line"
+                class="datasets-searchbar" />
+              <CheckboxFullyStored
+                :options="siteContent.filters.filters.fullyStored"
+                class="datasets-checkbox show-desktop-only" />
+              <Filters class="show-mobile-only" />
+            </div>
           </div>
-        </div>
 
-        <div class="col-4_md-12">
-          <div class="toolbar-panel-right">
-            <!-- <CheckboxFullyStored
-              :options="filters.fullyStored"
-              class="datasets-checkbox show-mobile-only" /> -->
-            <Sort :options="sortOptions" />
-            <Filters class="show-desktop-only" />
+          <div class="col-4_md-12">
+            <div class="toolbar-panel-right">
+              <CheckboxFullyStored
+                :options="siteContent.filters.filters.fullyStored"
+                class="datasets-checkbox show-mobile-only" />
+              <Sort :options="siteContent.filters.sort" />
+              <Filters class="show-desktop-only" />
+            </div>
           </div>
-        </div>
 
+        </div>
       </div>
     </div>
 
@@ -47,9 +49,9 @@
 
         <div class="col-8">
           <div class="button-list left">
-            <div class="results-count">
+            <!-- <div class="results-count">
               {{ resultCount }}
-            </div>
+            </div> -->
             <ButtonFilters
               v-for="(option, index) in selectedFilterOptions"
               :key="`${option.value}-${index}`"
@@ -63,11 +65,11 @@
 
         <div class="col-4">
           <div class="button-list right">
-            <Button
+            <!-- <Button
               :button="{type: 'outline'}"
               @clicked="clearAllFilters">
               {{ toolbarContent.clearAllFiltersButtonText }}
-            </Button>
+            </Button> -->
             <button
               :class="['button-layout layout-grid', layout === 'grid' ? 'selected' : '']"
               @click="$emit('updateLayout', 'grid')">
@@ -94,9 +96,9 @@ import { mapGetters } from 'vuex'
 import Filters from '@/components/filters'
 import Searchbar from '@/components/searchbar'
 import Sort from '@/components/sort'
-// import CheckboxFullyStored from '@/components/page-home/checkbox-fully-stored'
+import CheckboxFullyStored from '@/components/page-home/checkbox-fully-stored'
 import ButtonFilters from '@/components/buttons/button-filters'
-import Button from '@/components/buttons/button'
+// import Button from '@/components/buttons/button'
 
 import GridIcon from '@/components/icons/grid'
 import ListIcon from '@/components/icons/list'
@@ -109,9 +111,9 @@ export default {
     Filters,
     Searchbar,
     Sort,
-    // CheckboxFullyStored,
+    CheckboxFullyStored,
     ButtonFilters,
-    Button,
+    // Button,
     GridIcon,
     ListIcon
   },
@@ -150,13 +152,14 @@ export default {
       filters: 'datasets/filters',
       sortOptions: 'datasets/sortOptions',
       dataLoading: 'datasets/loading',
-      metadata: 'datasets/metadata'
+      metadata: 'datasets/metadata',
+      siteContent: 'general/siteContent'
     }),
     toolbarContent () {
       return this.pageContent.toolbar
     },
     count () {
-      return this.metadata.count
+      return this.siteContent.datasetList.length
     },
     resultCount () {
       const count = this.count
@@ -199,8 +202,36 @@ export default {
 
 <style lang="scss" scoped>
 // ///////////////////////////////////////////////////////////////////// General
+.feature-not-available-wrapper {
+  position: relative;
+  &:hover {
+    &::before {
+      transition: 150ms ease-in;
+      backdrop-filter: blur(10px);
+      opacity: 1;
+    }
+  }
+  &::before {
+    content: 'Feature not available';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: -0.5rem;
+    left: 0;
+    width: 100%;
+    height: calc(100% + 2.5rem);
+    z-index: 200;
+    border-radius: toRem(30) toRem(30) toRem(30) toRem(2);
+    opacity: 0;
+    transition: 150ms ease-out;
+  }
+}
+
 .toolbar-heading {
+  position: relative;
   margin-top: 2.25rem;
+  z-index: 300;
   // @include mini {
   //   margin-bottom: toRem(10);
   // }
@@ -273,5 +304,10 @@ export default {
   :deep(path) {
     fill: $rangoonGreen;
   }
+}
+
+.toolbar-bottom {
+  position: relative;
+  z-index: 300;
 }
 </style>

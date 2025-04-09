@@ -14,16 +14,12 @@ const getters = {
 // -----------------------------------------------------------------------------
 const actions = {
   // //////////////////////////////////////////////////////////////// getDataset
-  async getDataset ({ commit, getters, dispatch }, metadata) {
+  getDataset ({ commit, getters, dispatch }, metadata) {
     try {
+      const datasetList = metadata.datasetList
       const route = metadata.route
       const slug = route.params.id
-      const response = await this.$axiosAuth('/get-dataset', {
-        params: {
-          slug
-        }
-      })
-      const dataset = response.data.payload
+      const dataset = datasetList.find(dataset => dataset.slug === slug)
       commit('SET_DATASET', { dataset })
       return dataset
     } catch (e) {

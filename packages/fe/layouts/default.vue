@@ -1,7 +1,7 @@
 <template>
   <div class="master-container">
 
-    <Toaster />
+    <!-- <Toaster /> -->
 
     <SiteHeader />
 
@@ -16,7 +16,7 @@
 // ===================================================================== Imports
 import SiteHeader from '@/components/site-header'
 import SiteFooter from '@/components/site-footer'
-import Toaster from '@/modules/toaster/components/toaster'
+// import Toaster from '@/modules/toaster/components/toaster'
 
 // ====================================================================== Export
 export default {
@@ -24,8 +24,8 @@ export default {
 
   components: {
     SiteHeader,
-    SiteFooter,
-    Toaster
+    SiteFooter
+    // Toaster
   },
 
   data () {
@@ -36,7 +36,7 @@ export default {
   },
 
   async fetch () {
-    await this.$store.dispatch('datasets/getFiltersAndTypeahead')
+    // await this.$store.dispatch('datasets/getFiltersAndTypeahead')
     await this.$store.dispatch('general/getBaseData', 'general')
   },
 

@@ -22,7 +22,7 @@
           autocomplete: 'off',
           optionDisplayKey: 'name',
           optionReturnKey: 'slug',
-          options: datasetListTypeahead,
+          options: [], // datasetListTypeahead,
           defaultValue: value || '',
           resetGroupId: 'search',
           updateGroupId: 'search'

@@ -41,17 +41,6 @@
       </div>
     </section>
 
-    <!-- ============================================ No results placeholder -->
-    <section v-if="noResults" id="section-no-results">
-      <div class="grid-middle-center">
-        <div class="col-8">
-          <h3>
-            {{ pageContent.noResultsPlaceholderText }}
-          </h3>
-        </div>
-      </div>
-    </section>
-
   </div>
 </template>
 
@@ -65,6 +54,10 @@ import Toolbar from '@/components/page-home/toolbar'
 import DatasetLister from '@/components/page-home/dataset-lister'
 import PaginationControls from '@/components/pagination-controls'
 import Limit from '@/components/limit'
+
+import datasetList from '@/content/data/dataset-list.json'
+import filters from '@/content/data/filters.json'
+import categoryList from '@/content/data/categories.json'
 
 // ====================================================================== Export
 export default {
@@ -87,10 +80,13 @@ export default {
 
   async fetch ({ app, store, route, redirect }) {
     await store.dispatch('general/getBaseData', { key: 'index', data: IndexPageData })
-    const response = await store.dispatch('datasets/getDatasetList', { route })
-    if (response.fail) {
-      return redirect(response.route)
-    }
+    await store.dispatch('general/getBaseData', { key: 'datasetList', data: datasetList })
+    await store.dispatch('general/getBaseData', { key: 'filters', data: filters })
+    await store.dispatch('general/getBaseData', { key: 'categoryList', data: categoryList })
+    // const response = await store.dispatch('datasets/getDatasetList', { route })
+    // if (response.fail) {
+    //   return redirect(response.route)
+    // }
   },
 
   head () {

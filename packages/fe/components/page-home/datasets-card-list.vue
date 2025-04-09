@@ -23,8 +23,8 @@
             <span :class="['value', key]">
               <template v-if="!dataset[key]">-</template>
               <!-- ............................................... data size -->
-              <template v-else-if="key === 'data_size'">
-                {{ $formatBytes(dataset.data_size) }}
+              <template v-else-if="key === 'size'">
+                {{ $formatBytes(dataset.size) }}
               </template>
               <!-- ............................................... locations -->
               <template v-else-if="key === 'locations'">
@@ -52,8 +52,12 @@
             <span class="label">{{ label }}</span>
             <span :class="['value', key]">
               <template v-if="!dataset[key]">-</template>
+              <!-- .............................................. total size -->
+              <template v-else-if="key === 'total'">
+                {{ $formatBytes(dataset.total) }}
+              </template>
               <!-- ......................................... file extensions -->
-              <template v-else-if="key === 'file_extensions'">
+              <template v-else-if="key === 'fileExtensions'">
                 <span
                   v-for="(item, index) in dataset[key]"
                   :key="index">
