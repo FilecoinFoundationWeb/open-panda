@@ -1,0 +1,11 @@
+{
+  "AttachmentID": 7,
+  "SourceStorageID": 14,
+  "SourceStorage": {
+    "ID": 14,
+    "Name": "noaa-gsod-pds2",
+    "Type": "s3",
+    "Path": "noaa-gsod-pds"
+  },
+  "pieces": []
+}

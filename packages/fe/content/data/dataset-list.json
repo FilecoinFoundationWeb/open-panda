@@ -1,9 +1,7 @@
 [
   {
-    "slug": "genome-in-a-bottle-on-aws",
-    "name": "Genome in a bottle",
-    "id": "genome",
-    "cid": 280240,
+    "slug": "arpa-e-perform",
+    "name": "ARPA-E Performance Data",
     "replication": 5.12,
     "size": 143254216451,
     "total": 124685412,
@@ -20,8 +18,8 @@
         "full": "United States",
         "country_code": "US"
       }, {
-        "full": "",
-        "country_code": "DO"
+        "full": "United Kingdom",
+        "country_code": "GB"
       }
     ],
     "authors": [
@@ -54,5 +52,45 @@
         "url": "https://www.genomeinabottle.org"
       }
     ]
+  },
+  {
+    "slug": "cse-cic-ids2018",
+    "name": ""
+  },
+  {
+    "slug": "epa-rsei-pds",
+    "name": ""
+  },
+  {
+    "slug": "gdelt-open-data",
+    "name": ""
+  },
+  {
+    "slug": "irs-form-990",
+    "name": ""
+  },
+  {
+    "slug": "mogreps-g",
+    "name": ""
+  },
+  {
+    "slug": "nasa-power",
+    "name": ""
+  },
+  {
+    "slug": "ncar-cesm-lens",
+    "name": "Large Ensemble Community Project (LENS)"
+  },
+  {
+    "slug": "noaa-ghcn-pds",
+    "name": ""
+  },
+  {
+    "slug": "noaa-gsod-pds",
+    "name": ""
+  },
+  {
+    "slug": "noaa-normals-pds",
+    "name": ""
   }
 ]

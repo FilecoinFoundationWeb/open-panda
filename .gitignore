@@ -2,6 +2,7 @@
 packages/be/cache
 packages/be/public
 packages/be/tmp
+packages/fe/static/datasets
 
 # ====================================================================== General
 # Keys

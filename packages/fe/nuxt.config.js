@@ -103,7 +103,8 @@ export default {
     '~/modules/auth',
     '~/modules/search',
     '~/modules/form',
-    '~/modules/button'
+    '~/modules/button',
+    '~/modules/dataset'
   ],
   // ///////////////////////////////////////////////////// [Module] Nuxt-content
   // ---------------------------------------------------------------------------

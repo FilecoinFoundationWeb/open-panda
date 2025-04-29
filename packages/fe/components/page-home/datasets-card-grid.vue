@@ -56,7 +56,7 @@
             </span>
           </template>
           <button
-            v-if="fileExtData.length > 1"
+            v-if="fileExtData && fileExtData.length > 1"
             class="file-item"
             @click="toggleFileExtDisplayLimit()">
             {{ fileExtShowMore ? `-` : `+` }} {{ fileExtData.length - 1 }}

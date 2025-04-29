@@ -1,0 +1,75 @@
+{
+  "AttachmentID": 9,
+  "SourceStorageID": 18,
+  "SourceStorage": {
+    "ID": 18,
+    "Name": "arpa-e-perform2",
+    "Type": "s3",
+    "Path": "arpa-e-perform"
+  },
+  "pieces": [
+    {
+      "PieceCID": "baga6ea4seaqhprnghduw2bqjnszoqr5jy2hhke6lez6lsacviw7axa2f2pvl4dq",
+      "PieceSize": "34359738368",
+      "RootCID": "bafkreibruulyjd3x4xtfqjbhb5f5wohmlyb5quo237zhmjyww5w3jyqquq",
+      "FileSize": "33758601502",
+      "StoragePath": "baga6ea4seaqhprnghduw2bqjnszoqr5jy2hhke6lez6lsacviw7axa2f2pvl4dq.car"
+    },
+    {
+      "PieceCID": "baga6ea4seaqfash33myagq7mgn6uruby4e2bfszyflov5jd6ru6sxn6xhqsaqba",
+      "PieceSize": "34359738368",
+      "RootCID": "bafkreiflviphjemjff3kexkkgppenfhybmzfsn7n37nzqrekgpcalsxea4",
+      "FileSize": "33702690691",
+      "StoragePath": "baga6ea4seaqfash33myagq7mgn6uruby4e2bfszyflov5jd6ru6sxn6xhqsaqba.car"
+    },
+    {
+      "PieceCID": "baga6ea4seaqhuz3ckuzr2uuunlnjit346fetthaft3s4uomne34hlewcxl6guhi",
+      "PieceSize": "34359738368",
+      "RootCID": "bafkreigsyw7ewemjxxp6gybwec35twwdthtajs27qpp44bfghjzfagtlxu",
+      "FileSize": "33767238602",
+      "StoragePath": "baga6ea4seaqhuz3ckuzr2uuunlnjit346fetthaft3s4uomne34hlewcxl6guhi.car"
+    },
+    {
+      "PieceCID": "baga6ea4seaqpjxrtfls4liqwckm5geuh7qtqslkxmqrikhmctbsf6p2c2kqicna",
+      "PieceSize": "34359738368",
+      "RootCID": "bafkreiaidwr6v44jei7x7ly7o2bbtvxe22ihncgegevu77tl7qz7elgfte",
+      "FileSize": "33789692316",
+      "StoragePath": "baga6ea4seaqpjxrtfls4liqwckm5geuh7qtqslkxmqrikhmctbsf6p2c2kqicna.car"
+    },
+    {
+      "PieceCID": "baga6ea4seaqlylqir5ggdsfxqahdqpfprr7wkxdpufx22f5qmqowrp7dx7ekkli",
+      "PieceSize": "34359738368",
+      "RootCID": "bafkreicbh2tvy6djt7wljf2bhnilx6fxj67e3pcdxk7b3vk3taslrviqu4",
+      "FileSize": "33822457072",
+      "StoragePath": "baga6ea4seaqlylqir5ggdsfxqahdqpfprr7wkxdpufx22f5qmqowrp7dx7ekkli.car"
+    },
+    {
+      "PieceCID": "baga6ea4seaqiwuqouzj5glw6xls47cwooj42fdavpddzidiaxt6jibhrewk7cba",
+      "PieceSize": "34359738368",
+      "RootCID": "bafkreibbitsq42zupqxudey5orvowmhgyddzzvuceow6httwj54cwmg7ry",
+      "FileSize": "33818241424",
+      "StoragePath": "baga6ea4seaqiwuqouzj5glw6xls47cwooj42fdavpddzidiaxt6jibhrewk7cba.car"
+    },
+    {
+      "PieceCID": "baga6ea4seaqjtanqq4cx3y23my3qti5bmmjk26q3mcvpwshborvarw6dxlib4aa",
+      "PieceSize": "34359738368",
+      "RootCID": "bafkreief4z37i33c3uynbfmrvu7wdb6e6pgtn54jknq6tbmgnydhgoyu7m",
+      "FileSize": "33808068634",
+      "StoragePath": "baga6ea4seaqjtanqq4cx3y23my3qti5bmmjk26q3mcvpwshborvarw6dxlib4aa.car"
+    },
+    {
+      "PieceCID": "baga6ea4seaqdz2vhclx4ungdkgxr7xeabghsv4yr5f7urfs5m6ptzsm7uplmmoq",
+      "PieceSize": "34359738368",
+      "RootCID": "bafkreibgok4cmvqt3ch2xjq3zluyobhmc6dwao4lwfi5hvwyiexvddbi3q",
+      "FileSize": "33822546606",
+      "StoragePath": "baga6ea4seaqdz2vhclx4ungdkgxr7xeabghsv4yr5f7urfs5m6ptzsm7uplmmoq.car"
+    },
+    {
+      "PieceCID": "baga6ea4seaqif5wi55znpeej5jdk6jnu7e6woshesfx4wfq25elzlruypqi4miq",
+      "PieceSize": "34359738368",
+      "RootCID": "bafkreidqtnmixnpkbzpyf5itjwnkfcrtjlth7qtmcvf4b3aqb2nkup5cne",
+      "FileSize": "33795207891",
+      "StoragePath": "baga6ea4seaqif5wi55znpeej5jdk6jnu7e6woshesfx4wfq25elzlruypqi4miq.car"
+    }
+  ]
+}

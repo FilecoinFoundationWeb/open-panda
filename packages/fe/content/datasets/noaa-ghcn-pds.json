@@ -1,0 +1,47 @@
+{
+  "AttachmentID": 6,
+  "SourceStorageID": 12,
+  "SourceStorage": {
+    "ID": 12,
+    "Name": "noaa-ghcn-pds2",
+    "Type": "s3",
+    "Path": "noaa-ghcn-pds"
+  },
+  "pieces": [
+    {
+      "PieceCID": "baga6ea4seaqiayj7qd5z34qlfi4skk5ezfqfpfj37mpl5zf74wranpfatu4s2ny",
+      "PieceSize": "34359738368",
+      "RootCID": "bafkreidsbbxn5h64zrebubixpkbpyvcag55kgobrlgxznzzdrc6qg57yj4",
+      "FileSize": "33630837764",
+      "StoragePath": "baga6ea4seaqiayj7qd5z34qlfi4skk5ezfqfpfj37mpl5zf74wranpfatu4s2ny.car"
+    },
+    {
+      "PieceCID": "baga6ea4seaqh3gaxhwsb5fvuk5dyrpppvpwqhwtgdqawet6uf4ru3p4o32agqbq",
+      "PieceSize": "34359738368",
+      "RootCID": "bafkreiearz2jxzq67rgzkkrstadmegr7jihh5exws2njoryirz4vj2sfka",
+      "FileSize": "33818212754",
+      "StoragePath": "baga6ea4seaqh3gaxhwsb5fvuk5dyrpppvpwqhwtgdqawet6uf4ru3p4o32agqbq.car"
+    },
+    {
+      "PieceCID": "baga6ea4seaqp6nwnhpnfzskz6vz73brqvure244s5vwe5vxx4wo52az64jav4aq",
+      "PieceSize": "34359738368",
+      "RootCID": "bafkreifs5etq3yrcd7sovcv4o7ayjms3tse7n5j54qthjd3opfsjkvugza",
+      "FileSize": "33440303986",
+      "StoragePath": "baga6ea4seaqp6nwnhpnfzskz6vz73brqvure244s5vwe5vxx4wo52az64jav4aq.car"
+    },
+    {
+      "PieceCID": "baga6ea4seaqpt27a3dbbukej5l6jbntkxgipbwehybzpnd6eudlwg4j63br2ooi",
+      "PieceSize": "34359738368",
+      "RootCID": "bafkreig7yms4b6e4y34v4a7nlvavlj4lmrfnfcyeial4o36loco7cbg7p4",
+      "FileSize": "33822292444",
+      "StoragePath": "baga6ea4seaqpt27a3dbbukej5l6jbntkxgipbwehybzpnd6eudlwg4j63br2ooi.car"
+    },
+    {
+      "PieceCID": "baga6ea4seaqffytyvsijgr72hczodwwfwrtc2wzdetvpasihmgmkpucadgiwaei",
+      "PieceSize": "34359738368",
+      "RootCID": "bafkreid6gm4hpgxcj5e2ncctwptnyrv355rtiapx7lg34u232zwoyymmdq",
+      "FileSize": "33822284695",
+      "StoragePath": "baga6ea4seaqffytyvsijgr72hczodwwfwrtc2wzdetvpasihmgmkpucadgiwaei.car"
+    }
+  ]
+}

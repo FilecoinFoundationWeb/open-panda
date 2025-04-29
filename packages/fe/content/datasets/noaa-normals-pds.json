@@ -1,0 +1,11 @@
+{
+  "AttachmentID": 3,
+  "SourceStorageID": 6,
+  "SourceStorage": {
+    "ID": 6,
+    "Name": "noaa-normals-pds2",
+    "Type": "s3",
+    "Path": "noaa-normals-pds"
+  },
+  "pieces": []
+}

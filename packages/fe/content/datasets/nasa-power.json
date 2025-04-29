@@ -1,0 +1,11 @@
+{
+  "AttachmentID": 4,
+  "SourceStorageID": 8,
+  "SourceStorage": {
+    "ID": 8,
+    "Name": "nasa-power2",
+    "Type": "s3",
+    "Path": "nasa-power"
+  },
+  "pieces": []
+}

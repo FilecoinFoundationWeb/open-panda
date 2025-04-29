@@ -1,0 +1,11 @@
+{
+  "AttachmentID": 5,
+  "SourceStorageID": 10,
+  "SourceStorage": {
+    "ID": 10,
+    "Name": "irs-form-9902",
+    "Type": "s3",
+    "Path": "irs-form-990"
+  },
+  "pieces": []
+}
