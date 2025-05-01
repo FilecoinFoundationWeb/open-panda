@@ -1,6 +1,6 @@
 // ///////////////////////////////////////////////////////////////////// Imports
 // -----------------------------------------------------------------------------
-import CloneDeep from 'lodash/cloneDeep'
+// import CloneDeep from 'lodash/cloneDeep'
 
 // /////////////////////////////////////////////////////////////////////// State
 // ---------------------- https://vuex.vuejs.org/guide/modules.html#module-reuse
@@ -8,7 +8,7 @@ const state = () => ({
   cidList: false,
   metadata: {
     page: 1,
-    limit: 12,
+    limit: 50,
     totalPages: 1,
     count: false
   },
@@ -28,33 +28,50 @@ const getters = {
 const actions = {
   // //////////////////////////////////////////////////////////////// getCidList
   async getCidList ({ commit, getters, dispatch }, metadata) {
-    try {
-      dispatch('setLoadingStatus', { status: true })
-      const route = metadata.route
-      const query = CloneDeep(route.query)
-      const slug = route.params.id
-      const page = parseInt(query.page || getters.metadata.page)
-      const limit = query.limit || getters.metadata.limit
-      const search = query.search
-      const response = await this.$axiosAuth('/get-cid-list', {
-        params: {
-          slug,
-          page,
-          ...(limit && { limit }),
-          ...(search && { search })
-        }
-      })
-      const payload = response.data.payload
-      dispatch('setCidList', {
-        results: payload.results,
-        metadata: payload.metadata
-      })
-    } catch (e) {
-      console.log('======================== [Store Action: dataset/getCidList]')
-      console.log(e)
-      dispatch('setLoadingStatus', { status: false })
-      return false
-    }
+    dispatch('setLoadingStatus', { status: true })
+    const route = metadata.route
+    const slug = route.params.id
+    // const page = route.query.page
+    console.log(metadata)
+    const cids = await import(`@/static/datasets/${slug}/chunk-${metadata.page}.json`)
+    console.log(cids)
+    dispatch('setCidList', {
+      results: cids.default,
+      metadata: {
+        page: metadata.page,
+        totalPages: getters.metadata.totalPages,
+        count: getters.metadata.count
+      }
+    })
+    dispatch('setLoadingStatus', { status: false })
+    console.log(getters.cidList)
+    // try {
+    //   dispatch('setLoadingStatus', { status: true })
+    //   const route = metadata.route
+    //   const query = CloneDeep(route.query)
+    //   const slug = route.params.id
+    //   const page = parseInt(query.page || getters.metadata.page)
+    //   const limit = query.limit || getters.metadata.limit
+    //   const search = query.search
+    //   const response = await this.$axiosAuth('/get-cid-list', {
+    //     params: {
+    //       slug,
+    //       page,
+    //       ...(limit && { limit }),
+    //       ...(search && { search })
+    //     }
+    //   })
+    //   const payload = response.data.payload
+    //   dispatch('setCidList', {
+    //     results: payload.results,
+    //     metadata: payload.metadata
+    //   })
+    // } catch (e) {
+    //   console.log('======================== [Store Action: dataset/getCidList]')
+    //   console.log(e)
+    //   dispatch('setLoadingStatus', { status: false })
+    //   return false
+    // }
   },
   // //////////////////////////////////////////////////////////////// setCidList
   setCidList ({ commit }, payload) {

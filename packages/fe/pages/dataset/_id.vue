@@ -211,7 +211,7 @@
           data-push-left="off-1_xlg-0_md-1_sm-0"
           data-push-right="off-1_xlg-0_md-1_sm-0">
 
-          <CIDTable />
+          <CIDTable :dataset-metadata="datasetMetadata" />
 
         </div>
       </div>
@@ -268,7 +268,8 @@ export default {
     await store.dispatch('general/getBaseData', { key: 'datasetList', data: datasetList })
     const datasetExists = await store.dispatch('dataset/getDataset', { datasetList, route })
     if (!datasetExists) { return error('Dataset could not be found.') }
-    return { datasetExists }
+    const datasetMetadata = await import(`@/static/datasets/${route.params.id}/metadata.json`)
+    return { datasetExists, datasetMetadata: datasetMetadata.default }
   },
 
   data () {
@@ -368,6 +369,7 @@ export default {
         { label: 'Data Stored', value: this.dataStored },
         { label: 'Storage Providers', value: this.storageProviderCount },
         { label: 'Locations', value: this.locations },
+        { label: 'Available Until', value: this.dataset.availableUntil },
         { label: 'Download', value: this.dataset.downloadLinks }
       ]
     }
@@ -376,7 +378,11 @@ export default {
   watch: {
     '$route' () {
       this.$nextTick(() => {
-        this.getCidList({ route: this.$route })
+        console.log(this.$route)
+        this.getCidList({
+          route: this.$route,
+          page: parseInt(this.$route.query.page) || 1
+        })
       })
     },
     cidList () {
@@ -388,7 +394,10 @@ export default {
     handlePageResize(this)
     this.resize = () => { handlePageResize(this) }
     window.addEventListener('resize', this.resize)
-    await this.getCidList({ route: this.$route })
+    await this.getCidList({
+      route: this.$route,
+      page: 1
+    })
   },
 
   beforeDestroy () {

@@ -37,6 +37,7 @@
     ],
     "createdAt": "May 10, 2024",
     "description": "<h5>Genome in a Bottle is an academic consortium hosted by NIST to develop reference materials and standards for clinical sequencing.</h5><p>The Genome in a Bottle Consortium is a public-private-academic consortium hosted by NIST to develop the technical infrastructure (reference standards, reference methods, and reference data) to enable translation of whole human genome sequencing to clinical practice and innovations in technologies.</p><p>The priority of GIAB is authoritative characterization of human genomes for use in benchmarking, including analytical validation and technology development, optimization, and demonstration. Current work in the GIAB Analysis Team is focused on establishing assembly-based benchmarks for challenging medically relevant genes and other difficult regions. GIAB is also exploring expanding to additional samples consented for release of WGS and redistribution of commercial products: increasing the diversity of germline reference samples and developing paired tumor-normal cell lines.</p>",
+    "availableUntil": "Nov 24, 2027",
     "downloadLinks": [
       {
         "label": "Entire dataset",

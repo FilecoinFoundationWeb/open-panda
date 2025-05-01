@@ -1,7 +1,7 @@
 <template>
   <div class="cid-table">
     <!-- =========================================================== Toolbar -->
-    <div
+    <!-- <div
       v-if="cidList && cidList.length"
       class="toolbar">
       <div class="checkboxes">
@@ -20,18 +20,21 @@
           class="disabled"
           data-tooltip="Coming soon" />
       </div>
-    </div>
+    </div> -->
 
-    <div class="search-results-count">
+    <!-- <div class="search-results-count">
       <div v-if="resultsCount" class="count">
         {{ `${resultsCount} Search Results` }}
       </div>
-    </div>
+    </div> -->
 
     <!-- ============================================================= Table -->
+    <!-- {{ datasetMetadata }} -->
+    
     <div :class="['table', { 'null-state': !cidList || !cidList.length }]">
 
       <template v-if="cidList && cidList.length">
+        <!-- {{ cidList }} -->
         <CIDCard
           v-for="(cid, i) in cidList"
           :key="`cid-${i}`"
@@ -61,9 +64,9 @@
         :total-pages="totalPages"
         :loading="cidsLoading" />
 
-      <Limit
+      <!-- <Limit
         v-if="totalPages > 1 && limitOptions"
-        :options="limitOptions" />
+        :options="limitOptions" /> -->
 
     </div>
 
@@ -76,8 +79,8 @@ import { mapGetters } from 'vuex'
 
 import CIDCard from '@/components/cid-card'
 import PaginationControls from '@/components/pagination-controls'
-import Limit from '@/components/limit'
-import FieldContainer from '@/components/form/field-container'
+// import Limit from '@/components/limit'
+// import FieldContainer from '@/components/form/field-container'
 import Spinner from '@/components/spinners/triple-dot'
 
 // =================================================================== Functions
@@ -100,9 +103,16 @@ export default {
   components: {
     CIDCard,
     PaginationControls,
-    Limit,
-    FieldContainer,
+    // Limit,
+    // FieldContainer,
     Spinner
+  },
+
+  props: {
+    datasetMetadata: {
+      type: Object,
+      required: true
+    }
   },
 
   data () {
@@ -112,7 +122,9 @@ export default {
       checkboxes: [
         { label: 'Show only complete data', value: false },
         { label: 'Show only available CIDs', value: false }
-      ]
+      ],
+      // page: 1,
+      limit: 50
     }
   },
 
@@ -125,7 +137,7 @@ export default {
       filters: 'datasets/filters'
     }),
     totalPages () {
-      return this.metadata.totalPages
+      return this.datasetMetadata.totalPages
     },
     page () {
       return this.metadata.page
