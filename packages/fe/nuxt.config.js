@@ -21,6 +21,7 @@ const backendPort = (function () {
 // ////////////////////////////////////////////////////////////////////// Export
 // -----------------------------------------------------------------------------
 export default {
+  target: 'static',
   // ///////////////////////////////////////////////////// Runtime Configuration
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------- [Runtime] Public
@@ -100,7 +101,7 @@ export default {
     '~/modules/toaster',
     '~/modules/slider',
     '~/modules/ls',
-    '~/modules/auth',
+    // '~/modules/auth',
     '~/modules/search',
     '~/modules/form',
     '~/modules/button',

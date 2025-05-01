@@ -32,9 +32,7 @@ const actions = {
     const route = metadata.route
     const slug = route.params.id
     // const page = route.query.page
-    console.log(metadata)
     const cids = await import(`@/static/datasets/${slug}/chunk-${metadata.page}.json`)
-    console.log(cids)
     dispatch('setCidList', {
       results: cids.default,
       metadata: {
@@ -44,7 +42,6 @@ const actions = {
       }
     })
     dispatch('setLoadingStatus', { status: false })
-    console.log(getters.cidList)
     // try {
     //   dispatch('setLoadingStatus', { status: true })
     //   const route = metadata.route

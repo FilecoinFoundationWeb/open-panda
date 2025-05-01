@@ -21,6 +21,8 @@
 // ====================================================================== Import
 import BlockBuilder from '@/components/block-builder'
 
+import datasetList from '@/content/data/dataset-list.json'
+
 // ====================================================================== Export
 export default {
   name: 'PrivacyPage',
@@ -30,6 +32,7 @@ export default {
   },
 
   async asyncData ({ $content, store }) {
+    await store.dispatch('general/getBaseData', { key: 'datasetList', data: datasetList })
     const privacyContent = await $content('markdown/privacy').fetch()
     return { privacyContent }
   },

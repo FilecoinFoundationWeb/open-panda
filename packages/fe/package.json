@@ -7,6 +7,8 @@
     "dev": "../../node_modules/.bin/nuxt",
     "start": "../../node_modules/.bin/nuxt start",
     "build": "../../node_modules/.bin/nuxt build",
+    "generate": "../../node_modules/.bin/nuxt generate",
+    "serve": "../../node_modules/.bin/nuxt serve",
     "launch": "../../node_modules/.bin/nuxt build && pm2 restart op-fe",
     "launch-stable": "../../node_modules/.bin/nuxt build && pm2 restart op-ST-fe",
     "lint": "eslint . --ext .js,.vue",
