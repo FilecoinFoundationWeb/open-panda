@@ -8,11 +8,13 @@ The `static` branch contains the statically-generated frontend. The `develop` an
 
 This respository is structured as a monorepo using [npm workspaces](https://docs.npmjs.com/cli/v8/using-npm/workspaces).
 
-### Requirements
+## Requirements
 - This README assumes the usage of a device running macOS
-- Node `16.x` or higher must be used. [NVM](https://github.com/nvm-sh/nvm) can be used to install and switch between multiple Node versions.
+- Node `16.x` or higher must be used
+  - [NVM](https://github.com/nvm-sh/nvm) can be used to install and switch between multiple Node versions
 
-### Running the site locally
+
+## Local development
 
 Create a `.env` file in `packages/fe` and populate with the following:
 
@@ -50,20 +52,20 @@ Open the URL in a browser:
 https://localhost:13010/
 ```
 
-### Editing general site content
+## Editing content
 
 Content on this website can be edited right in this repository, accross `json`, markdown, and media files. This will allow you to edit both the written content on the site, as well as the datasets, their CIDs, and their sources. The sections below describe how to edit each content type.
 
-**Images**
+### Images
 Before images can be used in the site, they need to be added to the `packages/fe/static` directory. Once added, they can be referenced inside content files. For example, if you added the following image: `packages/fe/static/new-folder/fancy-image.jpeg`, then inside content files you can reference the file by using the following path: `/new-folder/fancy-image.jpeg`.
 
-**Structured content**
+### Structured content
 Page text and images can be modified by editing the corresponding page JSON file in `packages/fe/content/pages`. This applies to all pages except those in markdown, which is currently used only for two pages on the site (Privacy Policy and Terms).
 
-**Full text pages**
+### Full text pages
 Unlike the scructured content throughout the rest of the site, the Privacy Policy and Terms pages are handled through markdown and can be edited in `packages/fe/content/markdown`.
 
-**Categories**
+### Categories
 Datasets may be assigned a catoegy, which is shown on the home page categories slider. These can be edited in `packages/fe/content/categories.json`.
 
 ### Adding a dataset
@@ -246,9 +248,9 @@ for f in *; do
 done
 ```
 
-### Generating the site
+## Generating the static site
 
-Simply run the following in order to generate the static site files:
+To generate the static site files for production, or just for futher local testing, simply run the following:
 
 ```bash
 npm ci && npm run generate -w fe
@@ -256,4 +258,4 @@ npm ci && npm run generate -w fe
 
 The newly created `dist` directory in `packages/fe/dist` contains the entire site and can be deployed anywhere
 
-For services such as Vercel or Fleek, you should set the "output" directory as `packages/fe/dist`.
+For services such as Cloudflare Pages, Vercel or Fleek, you should set the "output" directory as `packages/fe/dist`.
