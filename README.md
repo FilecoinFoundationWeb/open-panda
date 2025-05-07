@@ -4,13 +4,17 @@
 
 The repository for the Open Panda statically-generated frontend. Open Panda is a platform for data researchers, analysts, students, and enthusiasts to interact with the largest open datasets in the world, stored on Filecoin's decentralized network.
 
-The `static` branch contains the statically-generated frontend and the `develop` branch contains the non-static application.
+The `static` branch contains the statically-generated frontend. The `develop` and `main` branches contain the non-static application (this version has more features, but requires a database and is now in legacy).
 
-### Requirements
+This respository is structured as a monorepo using [npm workspaces](https://docs.npmjs.com/cli/v8/using-npm/workspaces).
+
+## Requirements
 - This README assumes the usage of a device running macOS
-- Node `v16.x` must be used. [NVM](https://github.com/nvm-sh/nvm) can be used to install and switch between multiple Node versions.
+- Node `16.x` or higher must be used
+  - [NVM](https://github.com/nvm-sh/nvm) can be used to install and switch between multiple Node versions
 
-### Running the site locally
+
+## Local development
 
 Create a `.env` file in `packages/fe` and populate with the following:
 
@@ -36,9 +40,9 @@ cat "$(mkcert -CAROOT)/rootCA.pem" >> localhost_fullchain.pem
 
 Copy the generated PEM files (`localhost_cert.pem` and `localhost_key.pem`) to the root open-panda project directory.
 
-Start the server:
-
+Install dependencies in CI mode and start the server:
 ```bash
+npm ci
 npm run dev -w fe
 ```
 
@@ -48,19 +52,21 @@ Open the URL in a browser:
 https://localhost:13010/
 ```
 
-### Editing general site content
+## Editing content
 
-**Images**
+Content on this website can be edited right in this repository, accross `json`, markdown, and media files. This will allow you to edit both the written content on the site, as well as the datasets, their CIDs, and their sources. The sections below describe how to edit each content type.
+
+### Images
 Before images can be used in the site, they need to be added to the `packages/fe/static` directory. Once added, they can be referenced inside content files. For example, if you added the following image: `packages/fe/static/new-folder/fancy-image.jpeg`, then inside content files you can reference the file by using the following path: `/new-folder/fancy-image.jpeg`.
 
-**Pages**
-Page text and images can be modified by editing the corresponding page JSON file in `packages/fe/content/pages`.
+### Structured content
+Page text and images can be modified by editing the corresponding page JSON file in `packages/fe/content/pages`. This applies to all pages except those in markdown, which is currently used only for two pages on the site (Privacy Policy and Terms).
 
-**Privacy and Terms**
-Unlike the rest of the site, the privacy policy and terms pages are handled through markdown and can be edited in `packages/fe/content/markdown`.
+### Full text pages
+Unlike the scructured content throughout the rest of the site, the Privacy Policy and Terms pages are handled through markdown and can be edited in `packages/fe/content/markdown`.
 
-**Categories**
-The home page contains a categories slider. This can be edited in `packages/fe/content/categories.json`.
+### Categories
+Datasets may be assigned a catoegy, which is shown on the home page categories slider. These can be edited in `packages/fe/content/categories.json`.
 
 ### Adding a dataset
 
@@ -157,7 +163,7 @@ Here is an example dataset with all keys populated:
 
 ### Adding dataset CIDs
 
-Dataset CIDs, as seen on the singular pages, are added separately and are not required. If not included, the CID table will be hidden. 
+Dataset CIDs, as seen on the singular dataset pages, are added separately and are not required. If not included, the CID table will simply be hidden.
 
 Dataset CIDs can be added to `packages/fe/content/datasets/**`. Each dataset must be in a separate JSON file and the file must have the following structure:
 
@@ -199,7 +205,7 @@ All other keys in the file are ignored.
 
 Then you must add a file called `arpa-e-perform.json` (same as `slug` property) to `packages/fe/content/datasets`.
 
-In order to generate the correct structure automatically, take the file that is produced by singularity:
+In order to generate the correct structure automatically, take the file that is produced by Singularity:
 
 ```bash
 AttachmentID  SourceStorageID  
@@ -215,7 +221,7 @@ AttachmentID  SourceStorageID
         baga6ea4seaqolkvfezbcgt53hm3evxhsopdue6pbxykwrgjk3bd3e7v55dyqmmi  34359738368  bafkreihy3qqh2g74hojd5cjieq2uwzvpq7je4z65kc6qrrhpfaglgtmxpy  33807189849  baga6ea4seaqolkvfezbcgt53hm3evxhsopdue6pbxykwrgjk3bd3e7v55dyqmmi.car
 ```
 
-and run this awk script:
+and run this awk script (runs as bash in any unix-compatible CLI):
 
 ```bash
 for f in *; do
@@ -242,14 +248,14 @@ for f in *; do
 done
 ```
 
-### Generating the site
+## Generating the static site
 
-Simply run the following in order to generate the static site files:
+To generate the static site files for production, or just for futher local testing, simply run the following:
 
 ```bash
-npm run generate -w fe
+npm ci && npm run generate -w fe
 ```
 
 The newly created `dist` directory in `packages/fe/dist` contains the entire site and can be deployed anywhere
 
-For services such as Vercel or Fleek, you should set the "output" directory as `packages/fe/dist`.
+For services such as Cloudflare Pages, Vercel or Fleek, you should set the "output" directory as `packages/fe/dist`.
