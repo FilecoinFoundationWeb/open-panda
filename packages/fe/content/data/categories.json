@@ -1,26 +1,26 @@
 [
   {
-    "id": "anthropology",
+    "id": "Anthropology",
     "name": "Anthropology"
   },
   {
-    "id": "blockchain",
+    "id": "Blockchain",
     "name": "Blockchain"
   },
   {
-    "id": "genetics",
+    "id": "Genetics",
     "name": "Genetics"
   },
   {
-    "id": "literature",
+    "id": "Literature",
     "name": "Literature"
   },
   {
-    "id": "satellite",
+    "id": "Satellite",
     "name": "Satellite"
   },
   {
-    "id": "astronomy",
+    "id": "Astronomy",
     "name": "Astronomy"
   },
   {
@@ -28,47 +28,47 @@
     "name": "Civil Engineering"
   },
   {
-    "id": "geography",
+    "id": "Geography",
     "name": "Geography"
   },
   {
-    "id": "multimedia",
+    "id": "Multimedia",
     "name": "Multimedia"
   },
   {
-    "id": "tech",
+    "id": "Tech",
     "name": "Tech"
   },
   {
-    "id": "auditory",
+    "id": "Auditory",
     "name": "Auditory"
   },
   {
-    "id": "environment",
+    "id": "Environment",
     "name": "Environment"
   },
   {
-    "id": "geology",
+    "id": "Geology",
     "name": "Geology"
   },
   {
-    "id": "natural",
+    "id": "Natural",
     "name": "Natural Language"
   },
   {
-    "id": "automotive",
+    "id": "Automotive",
     "name": "Automotive"
   },
   {
-    "id": "finance",
+    "id": "Finance",
     "name": "Finance"
   },
   {
-    "id": "healthcare",
+    "id": "Healthcare",
     "name": "Healthcare"
   },
   {
-    "id": "popular",
+    "id": "Popular",
     "name": "Popular Culture"
   }
 ]
