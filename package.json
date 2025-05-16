@@ -16,7 +16,7 @@
     "url": "git@github.com:data-preservation-programs/openpanda.git"
   },
   "engines": {
-    "node": ">=16.18.0"
+    "node": ">=22.14"
   },
   "keywords": [],
   "bugs": {
@@ -26,5 +26,9 @@
   "workspaces": [
     "packages/fe",
     "packages/be"
-  ]
+  ],
+  "overrides": {
+    "vue": "~2.7",
+    "vue-server-renderer": "~2.7"
+  }
 }
