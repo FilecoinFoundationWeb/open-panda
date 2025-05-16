@@ -1,7 +1,10 @@
 # Open Panda Frontend
 
+See the main repo readme for the most up-to-date documentation on running this project as a static site.
 
 ## Storybook
+
+### _Note: (Storybook is deprecated)_
 
 To better display the components available on the site, their properties, and the states they might appear in, a Storybook app is included in this repo.
 

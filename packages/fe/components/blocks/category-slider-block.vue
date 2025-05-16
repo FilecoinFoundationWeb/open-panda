@@ -40,7 +40,7 @@
             <div class="inner-content">
               <div
                 class="background-image"
-                :style="{ 'background-image': `url('/images/categories/${slide.id}.jpg')` }">
+                :style="{ 'background-image': `url('/images/categories/${$GetKebab(slide.name)}.jpg')` }">
               </div>
               <div class="category">
                 <div class="text">

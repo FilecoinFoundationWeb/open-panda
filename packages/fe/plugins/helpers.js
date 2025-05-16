@@ -397,6 +397,12 @@ const ConnectWebsocket = config => (instance, next) => {
   })
 }
 
+// //////////////////////////////////////////////////////// getKebab
+// makes any string kebab-lowercase
+const GetKebab = (str) => {
+  return str.toLowerCase().replace(/[.,/#!$%^&*;:{}=_`~()]/g, '').replace(/\s+/g, '-').trim()
+}
+
 // //////////////////////////////////////////////////////// getPrettyNameFromUrl
 // replace '-' to ' '
 // remove extension
@@ -461,6 +467,7 @@ export default ({ $config, app }, inject) => {
   inject('connectWebsocket', ConnectWebsocket($config))
   inject('GetTagBasedOnUrl', GetTagBasedOnUrl)
   inject('GetTargetBasedOnUrl', GetTargetBasedOnUrl)
+  inject('GetKebab', GetKebab)
   inject('GetPrettyNameFromUrl', GetPrettyNameFromUrl)
   inject('scrollToHash', (route, element) => ScrollToHash(app, route, element))
 }
